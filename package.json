@@ -1,0 +1,17 @@
+{
+  "name": "sena-cabeleireiros",
+  "version": "1.0.0",
+  "description": "Site oficial do Sena Cabeleireiros - Especialistas em beleza afro",
+  "main": "index.html",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "keywords": ["salao", "beleza", "trancas", "alongamento", "dreads"],
+  "author": "Sena Cabeleireiros",
+  "license": "MIT",
+  "devDependencies": {
+    "vite": "^5.0.0"
+  }
+}
