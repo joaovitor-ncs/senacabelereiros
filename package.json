@@ -1,17 +1,12 @@
 {
   "name": "sena-cabeleireiros",
   "version": "1.0.0",
-  "description": "Site oficial do Sena Cabeleireiros - Especialistas em beleza afro",
+  "description": "Site oficial do Sena Cabeleireiros - Especialistas em beleza afro - Versão estática para HostGator",
   "main": "index.html",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview"
+    "info": "echo 'Este é um site estático. Basta fazer upload dos arquivos HTML, CSS e JS para o servidor.'"
   },
   "keywords": ["salao", "beleza", "trancas", "alongamento", "dreads"],
   "author": "Sena Cabeleireiros",
-  "license": "MIT",
-  "devDependencies": {
-    "vite": "^5.0.0"
-  }
+  "license": "MIT"
 }

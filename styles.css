@@ -51,11 +51,25 @@ body {
     align-items: center;
 }
 
-.nav-brand h1 {
+.nav-brand {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.nav-brand .logo {
+    max-height: 50px;
+    width: auto;
+    margin-bottom: 5px;
+    object-fit: contain;
+}
+
+.nav-brand h1.logo-fallback {
     color: var(--primary-color);
     font-size: 1.5rem;
     font-weight: 700;
     margin-bottom: 2px;
+    display: none;
 }
 
 .anos-mercado {
@@ -135,17 +149,60 @@ body {
     text-align: center;
 }
 
+.hero-badge {
+    margin-bottom: 20px;
+}
+
+.badge-text {
+    display: inline-block;
+    background: var(--secondary-color);
+    color: var(--white);
+    padding: 8px 20px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
 .hero-content h2 {
     font-size: 2rem;
     color: var(--primary-color);
     margin-bottom: 15px;
     font-weight: 700;
+    line-height: 1.2;
 }
 
-.hero-content p {
+.hero-description {
     font-size: 1.1rem;
     color: var(--text-light);
     margin-bottom: 30px;
+    line-height: 1.6;
+}
+
+.hero-description strong {
+    color: var(--text-dark);
+    font-weight: 600;
+}
+
+.hero-features {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+.feature-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--text-dark);
+    font-weight: 500;
+}
+
+.feature-item i {
+    color: var(--secondary-color);
+    font-size: 1.2rem;
 }
 
 .hero-buttons {
@@ -155,6 +212,13 @@ body {
     margin-bottom: 30px;
 }
 
+.hero-image {
+    position: relative;
+    width: 100%;
+    max-width: 300px;
+    margin: 0 auto;
+}
+
 .hero-image img {
     width: 100%;
     max-width: 300px;
@@ -162,6 +226,41 @@ body {
     object-fit: cover;
     border-radius: var(--border-radius);
     box-shadow: var(--shadow);
+    display: block;
+    background-color: #f0f0f0;
+}
+
+.image-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.4);
+    border-radius: var(--border-radius);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: var(--transition);
+    cursor: pointer;
+}
+
+.hero-image:hover .image-overlay {
+    opacity: 1;
+}
+
+.overlay-text {
+    color: var(--white);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+.overlay-text i {
+    font-size: 2rem;
 }
 
 /* Botões */
@@ -284,6 +383,8 @@ section h2 {
     overflow: hidden;
     border-radius: var(--border-radius);
     aspect-ratio: 1;
+    opacity: 1 !important;
+    visibility: visible !important;
 }
 
 .galeria-img {
@@ -291,6 +392,10 @@ section h2 {
     height: 100%;
     object-fit: cover;
     transition: var(--transition);
+    display: block !important;
+    opacity: 1 !important;
+    background-color: #f0f0f0;
+    visibility: visible !important;
 }
 
 .galeria-item:hover .galeria-img {
@@ -447,9 +552,29 @@ section h2 {
 }
 
 .whatsapp-link,
-.instagram-link {
+.instagram-link,
+.localizacao-link {
     color: var(--secondary-color) !important;
     font-weight: 600;
+    text-decoration: none;
+    transition: var(--transition);
+}
+
+.whatsapp-link:hover,
+.instagram-link:hover,
+.localizacao-link:hover {
+    color: var(--primary-color) !important;
+    text-decoration: underline;
+}
+
+.localizacao-link p {
+    margin: 0;
+    color: var(--text-light);
+    font-weight: normal;
+}
+
+.localizacao-link:hover p {
+    color: var(--secondary-color);
 }
 
 .instagram-link small {
@@ -549,6 +674,12 @@ section h2 {
         justify-content: center;
     }
     
+    .hero-features {
+        flex-direction: row;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+    
     .servicos-grid {
         grid-template-columns: repeat(2, 1fr);
     }
@@ -609,6 +740,10 @@ section h2 {
         justify-content: flex-start;
     }
     
+    .hero-features {
+        justify-content: flex-start;
+    }
+    
     .servicos-grid {
         grid-template-columns: repeat(3, 1fr);
     }
@@ -626,6 +761,18 @@ section h2 {
 }
 
 .fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Animação para galeria - não esconde as imagens */
+.fade-in-gallery {
+    opacity: 1;
+    transform: translateY(20px);
+    transition: all 0.6s ease;
+}
+
+.fade-in-gallery.visible {
     opacity: 1;
     transform: translateY(0);
 }

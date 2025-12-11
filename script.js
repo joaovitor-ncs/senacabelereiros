@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Função para calcular anos no mercado automaticamente
     function calcularAnosNoMercado() {
-        const anoFundacao = 1999;
+        const anoFundacao = 1997;
         const anoAtual = new Date().getFullYear();
         const anosNoMercado = anoAtual - anoFundacao;
         
@@ -96,7 +96,7 @@ Aguardo retorno para mais informações sobre os cursos disponíveis.`;
             const mensagemCodificada = encodeURIComponent(mensagem);
             
             // Criar link do WhatsApp
-            const linkWhatsApp = `https://wa.me/5511947228615?text=${mensagemCodificada}`;
+            const linkWhatsApp = `https://wa.me/5511980706794?text=${mensagemCodificada}`;
             
             // Abrir WhatsApp
             window.open(linkWhatsApp, '_blank');
@@ -133,25 +133,45 @@ Aguardo retorno para mais informações sobre os cursos disponíveis.`;
     
     // Animações de entrada dos elementos
     function inicializarAnimacoes() {
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        };
+        // Separar elementos: galeria não deve ter fade-in para evitar que imagens sumam
+        const elementsToAnimate = document.querySelectorAll('.servico-card, .contato-item');
+        const galeriaItems = document.querySelectorAll('.galeria-item');
         
-        const observer = new IntersectionObserver(function(entries) {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                }
+        // Verificar se IntersectionObserver está disponível
+        if ('IntersectionObserver' in window) {
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+            
+            const observer = new IntersectionObserver(function(entries) {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, observerOptions);
+            
+            // Aplicar fade-in apenas em elementos que não são imagens da galeria
+            elementsToAnimate.forEach(el => {
+                el.classList.add('fade-in');
+                observer.observe(el);
             });
-        }, observerOptions);
-        
-        // Adicionar classe fade-in aos elementos que devem animar
-        const elementsToAnimate = document.querySelectorAll('.servico-card, .galeria-item, .contato-item');
-        elementsToAnimate.forEach(el => {
-            el.classList.add('fade-in');
-            observer.observe(el);
-        });
+            
+            // Para galeria, aplicar animação mais suave sem opacity inicial
+            galeriaItems.forEach(el => {
+                el.classList.add('fade-in-gallery');
+                observer.observe(el);
+            });
+        } else {
+            // Fallback para navegadores antigos: mostrar todos os elementos imediatamente
+            elementsToAnimate.forEach(el => {
+                el.classList.add('fade-in', 'visible');
+            });
+            galeriaItems.forEach(el => {
+                el.classList.add('fade-in-gallery', 'visible');
+            });
+        }
     }
     
     // Funcionalidade para destacar link ativo no menu
@@ -260,28 +280,54 @@ Aguardo retorno para mais informações sobre os cursos disponíveis.`;
         }
     }
     
-    // Funcionalidade para lazy loading das imagens
-    function inicializarLazyLoading() {
+    // Funcionalidade para tratamento de erros de imagens
+    function inicializarTratamentoImagens() {
         const images = document.querySelectorAll('img');
         
-        const imageObserver = new IntersectionObserver((entries, observer) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    const img = entry.target;
-                    img.style.opacity = '0';
-                    img.style.transition = 'opacity 0.3s';
-                    
-                    img.onload = () => {
-                        img.style.opacity = '1';
-                    };
-                    
-                    observer.unobserve(img);
+        images.forEach(img => {
+            // Garantir que imagens da galeria sempre fiquem visíveis
+            const isGaleriaImg = img.classList.contains('galeria-img');
+            
+            if (isGaleriaImg) {
+                // Forçar visibilidade para imagens da galeria
+                img.style.opacity = '1';
+                img.style.display = 'block';
+                img.style.visibility = 'visible';
+            }
+            
+            // Garantir que imagens quebradas mostrem placeholder
+            img.addEventListener('error', function() {
+                if (!this.dataset.errorHandled) {
+                    this.dataset.errorHandled = 'true';
+                    // Se já não tem um placeholder SVG, adicionar um
+                    if (!this.src.includes('data:image/svg')) {
+                        this.style.backgroundColor = '#f0f0f0';
+                        this.style.display = 'block';
+                        this.style.minHeight = '200px';
+                        this.style.opacity = '1';
+                        this.style.visibility = 'visible';
+                        this.alt = 'Imagem não disponível';
+                    }
                 }
             });
-        });
-        
-        images.forEach(img => {
-            imageObserver.observe(img);
+            
+            // Garantir que imagens visíveis permaneçam visíveis
+            if (img.complete && img.naturalHeight !== 0) {
+                // Imagem já carregada - garantir que está visível
+                img.style.opacity = '1';
+                img.style.visibility = 'visible';
+            } else {
+                // Imagem ainda carregando - manter visível
+                img.style.opacity = '1';
+                img.style.visibility = 'visible';
+                img.style.transition = 'opacity 0.3s ease';
+                
+                // Apenas garantir que permaneça visível quando carregar
+                img.addEventListener('load', function() {
+                    this.style.opacity = '1';
+                    this.style.visibility = 'visible';
+                }, { once: true });
+            }
         });
     }
     
@@ -295,9 +341,9 @@ Aguardo retorno para mais informações sobre os cursos disponíveis.`;
     inicializarSmoothScroll();
     inicializarValidacaoFormulario();
     inicializarCarouselDepoimentos();
-    inicializarLazyLoading();
+    inicializarTratamentoImagens();
     
     // Log para confirmar que o script foi carregado
     console.log('Site Sena Cabeleireiros carregado com sucesso!');
-    console.log(`Calculando anos no mercado: ${new Date().getFullYear() - 1999} anos`);
+    console.log(`Calculando anos no mercado: ${new Date().getFullYear() - 1997} anos`);
 });
